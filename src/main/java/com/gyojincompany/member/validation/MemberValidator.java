@@ -1,6 +1,7 @@
 package com.gyojincompany.member.validation;
 
 import org.springframework.validation.Errors;
+import java.util.regex.*;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
@@ -13,6 +14,14 @@ public class MemberValidator implements Validator {
 		// TODO Auto-generated method stub
 		return MemberDto.class.isAssignableFrom(clazz);
 	}
+	
+	public static boolean isValidEmail(String email) {
+        // 간단한 이메일 정규식
+        String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
 
 	@Override
 	public void validate(Object target, Errors errors) {
@@ -46,10 +55,13 @@ public class MemberValidator implements Validator {
 			errors.rejectValue("confirmPassword", "id.mismatch","비밀번호 확인이 일치하지 않습니다.");
 		}
 		//18세 이상만 가입 가능하게 확인
-		if (age == null || age < 18) {
+		if (age == null ||age < 18) {
 			errors.rejectValue("age", "age.short","나이가 18세 이상만 가능합니다.");
 		}
-		
+		//email 형식 체크
+		if (!isValidEmail(email)) { //참이면 이메일 형식이 아니므로->error
+			errors.rejectValue("email", "email.badtype","올바른 이메일 형식이 아닙니다.");
+		}
 		
 	}
 

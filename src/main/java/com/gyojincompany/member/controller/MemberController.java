@@ -40,10 +40,13 @@ public class MemberController {
 			model.addAttribute("signupError", "회원 가입에 실패하였습니다.");
 			model.addAttribute("errorMsg", errorMsg);
 			
+			model.addAttribute("memberDto", memberDto); 
+			//가입화면에서 유저가 입력한 내용을 다시 보여주기 위해 memberDto를 가입화면으로 전송
+			
 			return "memberJoin";
 		}
 		
-		
+		model.addAttribute("memberDto", memberDto);
 		return "memberJoinOk";
 	}
 	
